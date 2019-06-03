@@ -1,0 +1,271 @@
+:description: Sample showing features that are not included in slides.adoc
+:backend: revealjs
+:author: Hans Jörg Heßmann
+:revealjs_theme: default
+:linkattrs:
+:idprefix:
+:imagesdir: images
+
+[state=no-title-footer]
+== anderScore slides examples
+
+== Simple Folie anlegen
+
+Möchte man eine Folie anlegen verwendet man einfach folgenden Code:
+....
+== Simple Folie anlegen
+
+Möchte man eine Folie anlegen verwendet man einfach folgenden Code:
+....
+
+== Wie kann ich meine Folien gestalten?
+
+Wichtigste Anlaufstellen die man immer in einem Tab offen haben sollte:
+
+* https://asciidoctor.org/docs/asciidoc-syntax-quick-reference[Asciidoc Quick Syntax Referenz]
+* https://asciidoctor.org/docs/asciidoctor-revealjs/[Reveal.js spezifische Erweiterungen Referenz]
+
+Folien haben *immer* das gleiche Seitenverhältnis von *16:9*. Die gestaltbare Fläche hat die Ausmaße *1728px * 894px*. Die Bildschirmauflösung des Beamers spielt dabei keine Rolle. revealjs skaliert die Folie so das das Ergebnis passt.
+
+Für die Erstellung der Folien sollte die Auflösung 1920px x 1080px, mindestens aber das 16:9 Verhältnis verwendet werden, damit sichergestellt ist das Inhalte auf dem Beamer nicht aus der Folie rutschen. Das ist die native Auflösung bei der *Bilder scharf dargestellt* werden müssen.
+
+
+
+== Referenz für das anderScore Template
+
+Es gibt noch ein paar zusätzliche Sachen die wir für unser Template umgesetzt haben. Zusätzlich sind hier Template spezifische Tipps dokumentiert. Im folgenden werden wir darauf eingehen.
+
+== Layoutvarianten
+
+Das anderScore Template ermöglicht eine flexible Anordnung von Elementen, nicht komplett freizügig wie in PPT aber es sollte für die meisten Use Cases reichen.
+Standardmäßig werden Inhalte in einer Spalte untereinander aufgeführt.
+
+Möchte man mehr empfiehlt sich die Verwendung der Rolle `.columns`. Mit dieser Rolle kann man Layouts mit beliebigen Spalten und Zeilen bauen.
+
+Im Normalfall wird Text oben-links angezeigt. Damit nicht zu viel weiße Fläche auf der Folie verbleibt, lässt sich die Ausrichtung des Inhalts auch ändern.
+
+
+
+== Beispiel - Einspaltiges Layout
+
+Das Einspaltige Layout kennen wir bereits. Einfach drauf los schreiben.
+
+
+Standardmäßig vertikal zentriert
+
+*Quellcode:*
+----
+Das Einspaltige Layout kennen wir bereits. Einfach drauf los schreiben.
+
+Standardmäßig vertikal zentriert und horizontal links ausgerichtet.
+
+----
+
+== Einspaltiges Layout - Inhalt ausrichten
+
+Die Ausrichtung kann man für die ganze Folie oder für einzelne Inhalte festlegen.
+
+* `.center` - Horizontal Mittig ausrichten
+* `.right` - Horizontal Rechts ausrichten
+* `.top` - Vertikal oben ausrichten(nur Folie)
+* `.bottom` - Vertikal unten ausrichten(nur Folie)
+* `.text-center` - Text Horizontal ausrichten
+* `.text-right` - Text Rechts ausrichten
+
+Die Attribute lassen sich auch kombinieren.
+
+[.red.center]
+Inhalt 1 -
+zentriert
+
+
+[.green.right]
+Inhalt 2 - rechts doch der text steht links
+
+[.yellow.center.text-center]
+Inhalt 3 - zentriert und text zentriert +
+Der Text sollte nicht auf einer Linie mit der oberen sein
+
+== Komplexere Layouts
+
+Wenn man mehr als das braucht gibt es das `.columns` Layout. Alle Elemente werden in Spalten angeordnet.
+*Wichtig* man muss `.columns` an die Folie schreiben damit es funktioniert.
+
+
+
+[.columns]
+== Beispiel - Zweispaltig
+
+
+image::Big-Picture-example.jpg[width=500px]
+
+
+--
+Standardmäßig ist die Breite der Spalte durch den Inhalt bestimmt:
+
+* macht Sinn z.B. bei Bildern
+* für zwei Texte nebeneinander braucht man mehr Einstellmöglichkeiten
+* Ist die Spalte voll wird eine Zeile begonnen
+--
+
+image::Big-Picture-example.jpg[width=500px]
+
+image::Big-Picture-example.jpg[width=500px]
+
+[.columns]
+== Beispiel - Zweispaltig feste Breiten
+
+[.two-col.green]
+image::Big-Picture-example.jpg[]
+
+[.two-col.yellow]
+--
+Feste Breiten vergibt man über entsprechende Rollen
+
+* `.one-col` - Spalte ist die volle Breite der Seite
+* `.two-col` - Spalte ist die Hälfte der Seitenbreite
+* `.three-col` - Spalte ist ein Drittel der Seitenbreite
+* `.four-col` - Spalte ist ein Virtel der Seitenbreite
+* `.five-col` - Spalte ist ein Fünftel der Seitenbreite
+--
+
+
+
+[.columns.centered]
+== Komplexes Layout - Beispiel
+
+[.yellow.one-col]
+Box 1
+
+[.red.two-col]
+Box 2
+
+
+[.two-col.double-width.green]
+Box 3fdsafdsafsdafa sdfafsdajklhfklsdahf fasdl jfjdlsakfj dlsjfklajsdl fhahsdklghlf
+
+[.blue.center]
+--
+Box 4
+Für mehr Inhalte gibt es die openblock notation mit den bindestrichen
+--
+
+[.columns.centered]
+== Komplexes Layout
+
+[.yellow.full-width]
+--
+image::Big-Picture-example.jpg[height=500px]
+--
+[.red.double-width]
+--
+* das ist doch eine Beschreibung
+* Shrimps mit Rice
+* wakanda
+--
+
+[.green.right]
+--
+Ja
+
+--
+
+[.blue]
+--
+Nein
+
+--
+
+[.columns]
+== Vorstellung
+
+[.top]
+--
+[.heading]
+Jetzt sind Sie dran!
+
+* Name
+* Vorwissen
+* Erwartungen
+* Themenwünsche
+--
+
+image::anybody.jpg[ height=600, pdfwidth=50%]
+
+== Include a Big-Image
+
+image::grass/wiese.jpg[pdfwidth=60%,height=894]
+
+
+
+== Including UML diagrams
+
+[plantuml, ReactiveStreams, png, role=plain, width=1400]
+.Reactive Streams
+....
+@startuml
+
+interface Publisher<T> {
+    subscribe(subscriber : Subscriber<? super T>)
+}
+
+interface Subscriber<T> {
+    onSubscribe(subscription : Subscription)
+    onNext(item : T)
+    onError(th : Throwable)
+    onComplete()
+}
+
+interface Subscription {
+    request(long n)
+    cancel()
+}
+
+interface Processor<T,R>
+
+Subscriber --|> Processor
+Publisher --|> Processor
+
+@enduml
+....
+
+[.columns]
+== Beispiel-Code
+
+--
+Code-Block links:
+
+[source, java]
+----
+interface Subscriber<T> {
+    onSubscribe(subscription : Subscription)
+    onNext(item : T)
+    onError(th : Throwable)
+    onComplete()
+}
+
+interface Subscription {
+    request(long n)
+    cancel()
+}
+----
+--
+
+--
+Code-Block rechts:
+
+[source, java]
+----
+interface Subscriber<T> {
+    onSubscribe(subscription : Subscription)
+    onNext(item : T)
+    onError(th : Throwable)
+    onComplete()
+}
+
+interface Subscription {
+    request(long n)
+    cancel()
+}
+----
+--

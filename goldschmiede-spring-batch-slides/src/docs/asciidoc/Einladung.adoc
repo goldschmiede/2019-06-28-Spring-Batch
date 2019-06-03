@@ -1,0 +1,14 @@
+== Einladung
+
+Bei Batchverarbeitung denkt man meistens an kleine Skripte die irgendwelche
+Daten von A nach B kopieren. Wofür benötigt man da ein Framework?
+
+Nun was ist, wenn Fehler auftreten, wenn eine Gegenstelle gerade nicht erreichbar
+oder überlastet ist oder wenn der Job einfach abbricht? Wie stellt man einen
+Wiederanlauf an der richtigen Stelle sicher? Was gibt es bzgl. Performance
+zu beachten?
+
+In dieser Goldschmiede wollen wir uns ansehen, wie Spring-Batch diese Fragen
+beantwortet. Wir tauchen einerseits in die Tiefe und sehen und genau an,
+wie Spring-Batch intern funktioniert und in die Bereite und betrachten
+Einsatzszenarien bei denen man nicht direkt an Batchverarbeitung denkt.

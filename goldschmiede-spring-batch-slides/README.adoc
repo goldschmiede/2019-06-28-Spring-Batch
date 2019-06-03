@@ -1,0 +1,138 @@
+= anderScore Revealjs & AsciiDoc Template
+
+Dieses Repository enthält das Template für Schulungen und Vorträge. Es sollte für neue Schulungen und Vorträge geforkt werden.
+
+*Designziele:*
+
+* Hohe Wartbarkeit der Folien
+* Versionierbarkeit
+* Einheitliches Layout
+* Einfache Bereitstellung der Folien für Teilnehmer
+* Wissenspool für Erstellung von Schulungen
+* Starter für Schulungen
+
+*Kein Designziel:*
+
+* Pixelgenaue Layouts
+* Animationen
+
+
+*Features:*
+
+- anderScore Theme
+- 16:9 Format Native Auflösung bei 1080p, Beamerauflösung ist egal
+- Erzeugung von Präsentation in HTML, Handout in PDF
+- Erzeugung von UML Diagrammen aus Quellcode mit plantuml
+- Live Reloading bei Änderungen am Quellcode erzeugt Folien neu(@HJHessmann)
+- verschiedene Layouts (2 spaltig, 3 Spaltig, Ausrichtung der Inhalte)
+- Speaker/Anlass spezifische Änderungen möglich
+- Folien/Handout spezifische Änderungen möglich
+
+*Known Issues:*
+
+* Feste Breiten mit Unterschiedlichen Verhältnissen sind nicht implementiert
+* ascidoctor zickt bei Änderungen von UML Diagrammen
+* subpages wurden mit dem Design noch nicht ausgibig getestet. Inhalt könnte aus der Folie laufen
+* Schulungstemplate sollte auch schätzungshilfen enthalten
+* Links auf den Folien sollten automatisiert überprüft werden.
+* Ausführlichere Doku der Features
+
+= Template Start
+
+Description
+
+[horizontal]
+.Zuständige Personen
+Trainer Name:: vor.nachname@anderscore.com
+
+
+== Preperation
+
+We recommend Intellij/Android Studio for working with this Repository.
+
+You will need the following Software installed and ready:
+
+* Maven (comes installed with Intellij)
+* Graphviz
+** Needed for compiling UML Diagramm code of http://plantuml.com/[plantuml]
+** Use `sudo apt install graphviz` or Download packages from https://www.graphviz.org/[Graphviz] website.
+* Java (tested with 8 and 11)
+
+== Build Slides
+
+To build the slides for this training run maven `mvn clean process-resources`.
+The slides will be generated in the folder link:target/generated-slides[]
+
+
+Tested with Java 8 and Java 11.
+
+== WYSIWG Mode
+
+To start a HTTP-Server execute:
+
+    mvn asciidoctor:http
+
+This will re-generate the slides each time an asciidoc file has been changed.
+There is also a new https://gitlab.ads.anderscore.com/presentations/revealjs-server[project from HJHessmann] which will replace the WYSIWYG Mode of Asciidoctor if it is mature.
+
+== Layout Slides
+
+The file link:src/docs/asciidoc/samples.adoc[] provides Dokumentation on how to layout slides using our template.
+
+== PDF erzeugen
+
+-anderscore template: /src/theme/themes
+-zum generieren von PDF-Dateien run "mvn"
+-PDF-Bildgröße wird in den .adoc Dateien festgelegt (parameter: pdfwidth) Bsp.: image::Big-Picture-example.jpg[pdfwidth=60%]
+-Speaker Notes werden im PDF automatisch angezeigt
+-Inline-Image (wahrscheinlich?) nicht möglich zu zentrieren (immer linksbündig)
+siehe auch: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc#keys-literal
+https://asciidoctor.org/docs/asciidoctor-pdf/#image-scaling
+https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc#keys-image
+
+
+To save the slides as PDF open them in Chrome and add `?print-pdf` to the URL.
+Then print the slides. For details see:
+https://github.com/hakimel/reveal.js/#pdf-export
+
+== Links
+
+* https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDoc Syntax Quick Reference]
+* https://asciidoctor.org/docs/asciidoctor-revealjs/[Asciidoctor Reveal.js]
+* https://github.com/hakimel/reveal.js#revealjs--[reveal.js Reference]
+* https://github.com/asciidoctor/asciidoctor-maven-plugin#asciidoctor-maven-plugin[Asciidoctor Maven Plugin]
+* https://asciidoctor.org/docs/asciidoctor-gradle-plugin/[Asciidoctor Gradle Plugin]
+* https://github.com/schauder/asciidoctor-talk[A talk about asciidoctor]
+* https://revealjs.com/[Reveal.js Demo]
+* https://asciidoctor.org/[Asciidoctor]
+* https://asciidoctor.org/docs/asciidoctorj/[AsciidoctorJ]
+
+= Change Speaker Name
+
+The name of the speaker is used through all slides. To change the name use the property in the link:pom.xml[]
+
+== Best Practices (im Template umgesetzt)
+
+* Erstellung der Schulungsunterlagen mit versionierbaren dateiformaten für die ein Difftool existiert.
+* (todo)Schulungsunterlagen sollten einen einheitlichen Rahmen bzw Ordnerstruktur bekommen
+* (todo)Links auf den Folien sollten automatisiert überprüft werden.
+
+== Best Practices (Erstellung von Schulungen)
+
+. Jede Schulung erhält ein gitRepository hier auf gitlab
+. unterlagen als pdf an die Teilnehmer herausgeben
+. Bereitstellung von Software auf Windows führt schonmal zu Problem
+. Eine Readme Datei die über den aktuellen Stand der Unterlagen informiert und neuen Dozenten bei der Durchführung begleitet.
+. anderscore USB-Sticks mit Schulungsunterlagen / tools für den fall kein Internet
+. "Drehbuch" für die Schulung
+. issues für todods/Verbesserungsvorschläge in Schulungen
+. Aufteilen der gesamten Schulung in Blöcke, Komposition der Blöcke kann verändern werden
+. Dauer der Blöcke festlegen
+. Mehr Aufgaben Stellen als in der zeit machbar ist
+. Erster Übungserfolg vor dem Mittagessen z.B. Hello World
+. Wiederholungs/Grundlagenkapitel um auf die Grundlegend bekannten Themenbereiche hinzuweisen und diese in Erinnerung zu rufen.
+. Am Ende Ausblick auf weitere Interessante Themenbereiche
+. Empfehlung neue Schulungen auf revealjs zu basieren
+. Ziel Schulungsunterlagen sind Trainerunabhängig
+
+

@@ -1,0 +1,13 @@
+**/.gradle/
+**/build/
+**/target/
+*~
+
+# ignore eclipse specific files
+/bin/
+**/.settings/
+
+# ignore IDEA specific files
+**/out/
+/.idea/
+*.iml

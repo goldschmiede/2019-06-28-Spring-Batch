@@ -1,0 +1,72 @@
+= Spring-Batch
+
+== Was ist Batchverarbeitung?
+- Umfrage: Woran denkt Ihr bei Batch-Verarbeitung?
+- Historisch: Stapelverarbeitung (Lochkarten)
+- Windows: BAT-Dateien
+- Programme, die ohne Benutzerinteraktion laufen
+- Großer Stil: Rechenzentrum/Operator viele Jobs
+- Anforderungen an Batch-Jobs
+
+== Spring-Batch
+- Bier
+- Historie
+- Lernkurve (mit Leiter)
+- JARs
+- Reader / Writer
+
+== Verwendung der Infra
+- Überblick Reader
+- Überblick Writer
+- Verwendung ohne Spring-Batch (ListReader/Writer)
+- FileItemReader
+- XmlReader
+- FileWriter
+- MultiResourceReader
+
+== Repository
+- Step (Reader, Processor, Writer)
+- Job (mehrere Steps)
+- Job-/StepExecution
+- Datenmodell
+- ExecutionContext
+- Instance vs Execution (Parameter)
+
+== Ausführung
+- Repeat-Template
+- Tasklet
+- Launcher
+- Ablauf mit Tasklet
+
+== Fehlerbehandlung
+- Chunk
+- ChunkorientetTasklet
+- Chunk-Ablauf
+- Transaktionen
+- Skipping
+- Retry-Template
+- Retry
+- Retry-Ablauf
+
+== Builder
+- Hierarchie
+- Flow
+
+== Datenaustausch und Protokollierung
+- Listener
+- Scopes
+
+== Parallelisierung
+- ExecutorService
+- Hintergrundtask
+- Partitioning
+- Remote-Chunking
+
+== Integration
+- Einbindung in Webanwendung
+- JobExplorer / JobOperator
+- Wiederanlauf
+
+== Cloud Task
+- Cloud Task Repository
+- Ausführen von Batch-Job als Cloud Task

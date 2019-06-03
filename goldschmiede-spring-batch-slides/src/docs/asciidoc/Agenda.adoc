@@ -1,0 +1,40 @@
+== Agenda
+
+. Was versteht man unter Batchverarbeitung? (Programm wird angestoßen,
+  Massendatenverarbeitung, ohne menschliche Interaktion)
+. Reader-Processor-Writer
+. Architektur von Spring-Batch (Infra, Core, Integration, Test)
+. Bestandteile von Infra
+. Reader, Writer, Processor
+. ListReader, ListWriter, IteratorReader
+. Stream
+. ExecutionContext
+. FlatFileItemReader und FlatFileItemWriter
+. XML mit XStream
+. XML mit JAXB
+. Delegate-Konzept
+. SyncReader
+. MultiResourceItemReader
+. Repeate-Template
+. Retry-Template
+. Job-Steps
+. Batch-Anwendung mit Jobs
+. Job ausführen (CommandLineJobRunner)
+. JobRepository
+. JobLauncher
+. Job ohne Spring
+. Job mit Spring
+. Job mit DB und Spring
+. JobBuilderFactory
+. StepBuilderFactory (aufdröseln  mit Aktivitätendiagramm)
+. Tasklet-Step mit Repeate-Template ausführen
+. Chunkorientened Tasklet
+. Retry (fault Tolerant)
+. Flow (parallel, Entscheidungen)
+. Partitioning
+. Remote-Chunking
+. Batch-Integration
+. Batches über Web-Anwendung anstoßen
+. Report-Generierung
+. Retry und Monitoring (wiederholende Tasks)
+. Polling
