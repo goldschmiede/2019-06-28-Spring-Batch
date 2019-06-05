@@ -2,5 +2,6 @@
 
 . link:intro.html[Einführung]
 . link:infra.html[Spring-Batch Infrastruktur]
+. link:repository.html[Spring-Batch Repository]
 
 link:samples.html[Reveal-JS Beispiele]

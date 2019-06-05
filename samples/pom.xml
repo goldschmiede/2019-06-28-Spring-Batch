@@ -45,6 +45,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
         <!-- Unittests mit JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

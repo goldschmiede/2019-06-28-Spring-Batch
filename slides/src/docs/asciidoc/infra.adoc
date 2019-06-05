@@ -62,7 +62,7 @@ Seit Spring-Batch 4.x gibt es Builder für alle Reader und Writer
 
 === FlatFileItemReader verwenden
 
-[code, java, indent=0]
+[source, java, indent=0]
 ----
 include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/infra/FlatFileItemReaderTest.java[tags=readPersons]
 ----

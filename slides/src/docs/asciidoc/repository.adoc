@@ -1,0 +1,39 @@
+== Spring-Batch Repository
+
+[.heading]
+Aufbau eines Batch-Jobs
+
+[plantuml, BatchJob, svg, height=750]
+....
+interface ItemReader
+interface ItemWriter
+interface ItemProcessor
+
+Job -> "1..n" Step
+ItemReader "1" <-- Step 
+Step -> "0..1" ItemProcessor
+Step --> "1" ItemWriter
+....
+
+=== Laufzeit-Datenmodell
+
+[plantuml, JobLaufzeitModell, svg, height=750]
+....
+Job <-- "0..n" JobInstance
+note left: Je erfolgreichem Lauf\ngibt es eine JobInstance
+
+JobInstance -> "1..n" JobExecution
+note top: Je versuchtem Lauf
+
+JobExecution -> "1..n" StepExecution
+Step <-- "0..n" StepExecution
+JobExecution --> "1" JobParameters
+note left: Es gibt identifizierende und\nnicht identifizierende Parameter
+
+JobExecution --> "1" ExecutionContext
+StepExecution --> "1" ExecutionContext
+....
+
+=== Datenbank-Schema
+
+image::spring-batch/Repository.png[width=100%]
