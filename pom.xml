@@ -9,6 +9,7 @@
 
     <modules>
         <module>goldschmiede-spring-batch-slides</module>
+        <module>goldschmiede-spring-batch-samples</module>
         <module>goldschmiede-skip-simulation</module>
 	</modules>
 </project>

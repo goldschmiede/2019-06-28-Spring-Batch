@@ -1,0 +1,21 @@
+== Spring-Batch Infrasturktur
+
+[.heading]
+Reader und Writer
+
+
+
+== Reader
+
+
+
+== Writer
+
+
+
+=== Verwendung der Infrastruktur
+
+* Man kann Reader/Writer unabhängig vom Framework verwenden
+* Einzige Notwendigkeit: `ExecutionContext`
+* Besonders interessant bei `FlatFileItemReader` und `FlatFileItemWriter`
+* 

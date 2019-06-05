@@ -1,0 +1,83 @@
+== Batchverarbeitung
+
+[.heading]
+Was versteht man darunter?
+
+=== Herkunft
+
+* Historisch: Stapelverarbeitung (Lochkarten)
+* Windows: .BAT Dateien
+* Großer Stil: Operator verwaltet Jobs im Rechenzentrum
+* Batchverarbeitung vs. Dialogverarbeitung
+
+=== Wodurch zeichnet sich Batchverarbeitung aus?
+
+Batch-Programme ...
+
+* laufen ohne Benutzerinteraktion
+* verarbeiten eine vorgegebene Datenmenge
+* enden nachdem alle Daten verarbeitet wurden
+
+=== Anforderungen
+
+Batch-Programme ...
+
+* müssen große Datenmengen verarbeiten können
+* müssen ausreichende Performance liefern
+* müssen mit Fehlern klarkommen
+** defekte Eingangsdaten
+** (temporäre) Ausfälle
+* müssen Wideranlauf unterstützen
+* müssen überwacht werden können
+
+== Spring-Batch
+
+image::spring-batch/Mothers-Brewing-Spring-Batch.jpg[]
+
+=== Historie
+
+* 2007: Code-Beitrag von Accenture
+* 2008: Spring-Batch-1.0.0.FINAL (Java 4)
+* 2009: 2.0.0.RELEASE (Java 5, Generics, Flows, Remote Chunking, Partitioning)
+* 2014: 3.0.0.RELEASE (JSR-352, Spring 4, Java 8)
+* 2017: 4.0.0.RELEASE (Spring 5, benötigt Java 8, Builder für Reader/Writer)
+
+=== Lernkurve
+
+image::spring-batch/Lernkurve1.svg[width=1200]
+
+=== Lernkurve
+
+image::spring-batch/Lernkurve3.svg[width=1200]
+
+=== Architektur (JARs)
+
+[plantuml, Spring-Batch-Komponenten, svg, height=600]
+....
+component "spring-batch-core" as core
+component "spring-batch-infrastructure" as infra
+component "spring-batch-test" as test
+component "spring-batch-integration" as integration
+
+integration --> core
+test --> core
+core --> infra
+integration --> infra
+test --> infra
+....
+
+=== Typischer Ablauf eines Batch-Jobs
+
+[plantuml, Typischer-Batch-Ablauf, svg, height=740]
+....
+start
+:Datensatz lesen;
+while (Datensatz vorhanden?) is (ja)
+    :Datensatz verarbeiten;
+    :Datensatz schreiben;
+    :Nächsten Datensatz lesen;
+endwhile (nein)
+stop
+....
+
+include::index.adoc[]
