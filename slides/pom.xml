@@ -239,6 +239,8 @@
                                 -->
                                 <revealjsdir>reveal.js-${revealjs.version}</revealjsdir>
                                 <!-- put here the reveal.js specific attributes -->
+                                <samples>${basedir}/../samples</samples>
+
                                 <revealjs_transition>linear</revealjs_transition>
                                 <revealjs_slidenumber>true</revealjs_slidenumber>
                                 <revealjs_theme>${presentation.theme}</revealjs_theme>

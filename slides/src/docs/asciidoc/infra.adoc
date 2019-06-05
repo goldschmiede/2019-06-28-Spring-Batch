@@ -1,21 +1,71 @@
-== Spring-Batch Infrasturktur
+== Spring-Batch Infrastruktur
 
 [.heading]
 Reader und Writer
 
+* Flat Files (delimited, fixed size)
+* XML/JSON Files (große Dateien, StAX+OXM fragmentweise)
+* Muli-File Input
+* Datenbanken (JDBC, JPA, Cursor-based/Paging, NoSQL, LDAP)
+* Messaging (JMS, AMQP)
+* Diverse Wrapper und Adapter (`IteratorItemReader`, `SynchronizedItemStreamReader`, JSR-352) 
 
+=== FlatFileItemReader
 
-== Reader
+[plantuml, FlatFileItemReader, svg, width=1800]
+....
+interface LineMapper<T> {
+    mapLine(line: String, lineNumber: int): T
+}
 
+interface LineTokenizer {
+    tokenize(line: String): FieldSet
+}
 
+interface FieldSetMapper<T> {
+    mapFieldSet(fieldSet: FieldSet): T
+}
 
-== Writer
+class DefaultLineMapper<T>
 
+FlatFileItemReader -> LineMapper
+LineMapper <|.. DefaultLineMapper
+LineTokenizer <- DefaultLineMapper
+DefaultLineMapper -> FieldSetMapper
+LineTokenizer <|.. DelimitedLineTokenizer
+LineTokenizer <|.. FixedLengthTokenizer
+FieldSetMapper <|.. BeanWrapperFieldSetMapper
+BeanWrapperFieldSetMapper -|> DefaultPropertyEditorRegistrar
+....
 
+=== Beispiel: CSV Datei einlesen
 
-=== Verwendung der Infrastruktur
+.sample-data.csv
+----
+include::{samples}/src/main/resources/sample-data.csv[]
+----
 
-* Man kann Reader/Writer unabhängig vom Framework verwenden
-* Einzige Notwendigkeit: `ExecutionContext`
-* Besonders interessant bei `FlatFileItemReader` und `FlatFileItemWriter`
-* 
+[source, java]
+.Person.java
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/infra/Person.java[tags=code]
+----
+
+=== FlatFileItemReader erzeugen
+
+[source, java, indent=0]
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/infra/FlatFileItemReaderTest.java[tags=createPersonReader]
+----
+
+Seit Spring-Batch 4.x gibt es Builder für alle Reader und Writer
+
+=== FlatFileItemReader verwenden
+
+[code, java, indent=0]
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/infra/FlatFileItemReaderTest.java[tags=readPersons]
+----
+
+=> Reader und Writer lassen sich auch ohne Spring-Batch-Framework einsetzen
+

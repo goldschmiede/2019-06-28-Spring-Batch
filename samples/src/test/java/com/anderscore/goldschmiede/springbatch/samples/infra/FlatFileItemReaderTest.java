@@ -25,9 +25,10 @@ public class FlatFileItemReaderTest {
                         new Person("Izmir", "Egal"));
     }
 
+    // tag::createPersonReader[]
     private FlatFileItemReader<Person> createPersonReader() {
         FlatFileItemReader<Person> reader = new FlatFileItemReaderBuilder<Person>()
-                .name("personReader")
+                .name("personReader") // alternativ: .saveState(false)
                 .resource(new ClassPathResource("sample-data.csv"))
                 .delimited().delimiter(";")
                 .names(new String[] { "firstName", "lastName" })
@@ -40,11 +41,13 @@ public class FlatFileItemReaderTest {
                 .build();
         return reader;
     }
+    // end::createPersonReader[]
 
+    // tag::readPersons[]
     private List<Person> readPersons(ItemStreamReader<Person> reader) throws Exception {
         List<Person> persons = new ArrayList<>();
         Person person;
-        ExecutionContext ec = new ExecutionContext();
+        ExecutionContext ec = new ExecutionContext(); // Damit speichert der Reader seinen Fortschritt
         reader.open(ec);
         while ((person = reader.read()) != null) {
             persons.add(person);
@@ -52,4 +55,5 @@ public class FlatFileItemReaderTest {
         reader.close();
         return persons;
     }
+    // end::readPersons[]
 }
