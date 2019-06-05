@@ -1,0 +1,85 @@
+== Job Ausführung
+
+[.lead]
+RepeateTemplate -- Ein Framework für eine Schleife?
+
+[plantuml, RepeatTemplate, svg, width=1700]
+....
+interface RepeatOperations {
+    iterate(callback: RepeatCallback): RepeatStatus
+}
+
+interface CompletionPolicy
+interface ExceptionHandler
+interface RepeatListener
+
+enum RepeatStatus {
+    CONTINUABLE
+    FINISHED
+}
+
+interface RepeatCallback {
+    doInIteration(RepeatContext context): RepeatStatus
+}
+
+interface RepeatContext
+interface AttributeAccessor
+
+RepeatOperations <|.. RepeatTemplate 
+RepeatTemplate *-> "1" CompletionPolicy
+RepeatTemplate *--> "1" ExceptionHandler 
+RepeatTemplate *--> "0..n" RepeatListener
+
+CompletionPolicy <|.. DefaultResultCompletionPolicy
+DefaultResultCompletionPolicy <|-- SimpleCompletionPolicy
+note right: Einfacher Zähler
+
+CompletionPolicy <|.. TimeoutTerminationPolicy
+
+RepeatCallback .> RepeatStatus
+RepeatCallback ..> RepeatContext 
+AttributeAccessor <|- RepeatContext
+RepeatContext --> RepeatContext: parent
+
+note as N
+gehören
+zusammen
+end note
+
+N .. RepeatContext
+N .. CompletionPolicy
+....
+
+=== TaskletStep
+
+[plantuml, TaskletStep, svg, width=1800]
+....
+interface Step
+interface RepeatOperations
+note left: RepeatTemplate
+interface Tasklet {
+    execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus
+}
+interface PlatformTransactionManager
+
+Step <|.. TaskletStep
+RepeatOperations "1" <-* TaskletStep
+TaskletStep *-> "1" Tasklet
+TaskletStep --> "1" PlatformTransactionManager
+....
+
+=== Tasklet ausführen
+
+[plantuml, TaskletExec, svg, width=800]
+....
+loop until FINISHED
+    TaskletStep -> TransactionTemplate: execute
+    activate TransactionTemplate
+    
+    TransactionTemplate -> Tasklet: execute
+    activate Tasklet
+    deactivate Tasklet
+    
+    deactivate TransactionTemplate
+end
+....
