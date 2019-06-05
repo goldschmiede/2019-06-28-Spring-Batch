@@ -252,8 +252,19 @@ section.has-light-background {
   text-align: right;
 }
 
+// Specific
 
+.reveal .teacherBox {
+    width: 100%;
+    text-align: center;
+    margin: 20px 0px;
+    padding: 10px;
+    background-color: #DAEFE8;
+}
 
+// Spring-Training
 
-
-
+.reveal .small{
+     font-size: 0.6em;
+     line-height: 1.2em;
+}

@@ -1,7 +1,20 @@
 == Spring-Batch Repository
 
-[.heading]
-Aufbau eines Batch-Jobs
+[.lead]
+Wozu ein Repository?
+
+[%step]
+* Protokollierung
+* Wiederanlauf
+* Überwachung
+* Steuerung
+
+{empty} +
+
+[.teacherBox]
+TIP: `MapJobRepository` kann als Platzhalter verwendet werden
+
+=== Aufbau eines Batch-Jobs
 
 [plantuml, BatchJob, svg, height=750]
 ....
