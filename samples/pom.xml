@@ -50,7 +50,7 @@
             <artifactId>hsqldb</artifactId>
             <scope>runtime</scope>
         </dependency>
-        
+
         <!-- Unittests mit JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -75,4 +75,44 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <!-- tag::exec[] -->
+                        <configuration>
+                            <mainClass>org.springframework.batch.core.launch.support.CommandLineJobRunner</mainClass>
+                            <arguments>
+                                <argument>com.anderscore.goldschmiede.springbatch.samples.exec.HelloJobConfig</argument>
+                                <argument>helloJob</argument>
+                            </arguments>
+                        </configuration>
+                        <!-- end::exec[] -->
+                    </execution>
+                    <execution>
+                        <id>goodBye</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.springframework.batch.core.launch.support.CommandLineJobRunner</mainClass>
+                            <arguments>
+                                <argument>com.anderscore.goldschmiede.springbatch.samples.exec.HelloJobConfig</argument>
+                                <argument>goodByeJob</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

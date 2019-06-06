@@ -83,3 +83,38 @@ loop until FINISHED
     deactivate TransactionTemplate
 end
 ....
+
+=== Job definieren
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobConfig.java[tag=helloJob]
+----
+
+=== Rahmen für Job-Konfiguration
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobConfig.java[tag=config]
+----
+
+=== Job ausführen (Unit-Test)
+
+[source, java, indent=0]
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobTest.java[tag=code]
+----
+
+=== Job (CommandLineRunner)
+
+[source, xml, indent=0]
+----
+include::{samples}/pom.xml[tag=exec]
+----
+
+=== Job manuell zusammenstöpseln
+
+[source, java, indent=0]
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobManualTest.java[tag=code]
+----
