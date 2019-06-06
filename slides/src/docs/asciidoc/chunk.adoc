@@ -53,5 +53,67 @@ SimpleChunkProcessor o--> "1" ItemWriter
 SimpleChunkProvider -[hidden]> ChunkOrientedTasklet
 ChunkOrientedTasklet -[hidden]> SimpleChunkProcessor
 ItemProcessor -[hidden]- ItemWriter
-
 ....
+
+=== Chunkverarbeitung
+
+[plantuml, ChunkExec, svg, width=1800]
+....
+loop until FINISHED (RepeatTemplate)
+    TaskletStep -> TransactionTemplate: execute
+    activate TransactionTemplate
+    
+    TransactionTemplate -> ChunkOrientedTasklet: execute
+
+    activate ChunkOrientedTasklet
+    ChunkOrientedTasklet -> SimpleChunkProvider: provide
+    
+    loop chunk-size times (RepeatTemplate)
+        SimpleChunkProvider -> ItemReader: read
+    end
+
+    ChunkOrientedTasklet -> SimpleChunkProcessor: process
+    activate SimpleChunkProcessor
+    
+    loop for each item
+        SimpleChunkProcessor -> ItemProcessor: process
+    end
+   
+    SimpleChunkProcessor -> ItemWriter: write 
+    deactivate SimpleChunkProcessor
+    
+    deactivate ChunkOrientedTasklet
+    
+    deactivate TransactionTemplate
+end
+....
+
+=== Reader/Processor/Writer
+
+* Reader: Rückgabewert `null` signalisiert Ende
+* Processor: Rückgabewert `null` überspringt Datensatz (Filter)
+* Verhalten von Spring-Batch im Ausnahmefall wird über Exceptions gesteuert
+
+=== Welche Fehler gibt es?
+
+|===
+|Job abbrechen|Datensatz überpringen|Erneut versuchen
+
+|Systemausfall|Programmierfehler|Verbindungsunterbrechung|
+|===
+* Systemausfälle
+* Programmierfehler/defekte Daten/unberücksichtigte Ausnahmen
+* Neustart, Verbindungsunterbrechung
+
+=== Welches Fehlerverhalten wäre wünschenswert?
+
+*An Transaktionen denken!*
+
+* Abbruch des Batch-Jobs bei 
+* Reader
+    
+* Processor
+* Writer
+* Netz
+
+
