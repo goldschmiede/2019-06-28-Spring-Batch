@@ -4,5 +4,6 @@
 . link:infra.html[Spring-Batch Infrastruktur]
 . link:repository.html[Spring-Batch Repository]
 . link:exec.html[Job Ausführung]
+. link:chunk.html[Chunk Verarbeitung und Fehlerbehandlung]
 
 link:samples.html[Reveal-JS Beispiele]

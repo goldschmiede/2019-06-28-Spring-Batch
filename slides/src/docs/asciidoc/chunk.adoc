@@ -1,0 +1,57 @@
+== Chunkverarbeitung und Fehlerbehandlung
+
+[.lead]
+Wozu Chunkverarbeitung?
+
+[%step]
+- Transaktion zu groß (wenn der ganze Job in einer Transaktion läuft)
+** Rollback Segment läuft über
+** Bei Fehler wird alles abgebrochen
+- Transaktionen zu klein (wenn jeder Datensatz in einer Transaktion verarbeitet wird)
+** Performance
+** Spring-Batch aktualisiert Status mit jeder Transaktion
+- => Daten werden in Chunks verarbeitet
+
+=== ChunkOrientedTasklet
+
+[plantuml, ChunkOrientedTasklet, svg, width=1800]
+....
+interface Tasklet
+interface RepeatOperations
+note bottom: Repeat\nTemplate
+interface ChunkProvider<I>
+interface ChunkProcessor<I>
+
+class ChunkOrientedTasklet<I>
+class SimpleChunkProvider<I>
+class FaultTolerantChunkProvider<I>
+class SimpleChunkProcessor<I, O>
+class FaultTolerantChunkProcessor<I, O>
+
+interface ItemReader<I>
+interface ItemProcessor<I, O>
+interface ItemWriter<O>
+interface SkipPolicy
+
+ChunkProvider "1" <--o ChunkOrientedTasklet
+Tasklet <|.. ChunkOrientedTasklet
+ChunkProcessor "1" <--o ChunkOrientedTasklet
+
+ChunkProvider <|.. SimpleChunkProvider
+SimpleChunkProvider <|-- FaultTolerantChunkProvider
+ChunkProcessor <|.. SimpleChunkProcessor
+SimpleChunkProcessor <|-- FaultTolerantChunkProcessor
+
+FaultTolerantChunkProvider o-> "1" SkipPolicy
+SkipPolicy "2" <-o FaultTolerantChunkProcessor
+
+ItemReader "1" <--o SimpleChunkProvider
+RepeatOperations "1" <-o SimpleChunkProvider
+SimpleChunkProcessor o-> "1" ItemProcessor
+SimpleChunkProcessor o--> "1" ItemWriter
+
+SimpleChunkProvider -[hidden]> ChunkOrientedTasklet
+ChunkOrientedTasklet -[hidden]> SimpleChunkProcessor
+ItemProcessor -[hidden]- ItemWriter
+
+....
