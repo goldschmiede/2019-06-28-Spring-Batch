@@ -57,7 +57,7 @@ public class BallContainer implements ItemReader<Ball>, ItemWriter<Ball>, ItemPr
         synchronized (this) {
             processing = Optional.ofNullable(item);
         }
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(1);
         synchronized (this) {
             processing = Optional.empty();
         }
@@ -75,5 +75,17 @@ public class BallContainer implements ItemReader<Ball>, ItemWriter<Ball>, ItemPr
         pool.forEach(renderer::renderToRead);
         processing.ifPresent(renderer::renderProcessing);
         writer.getWrittenItems().forEach(renderer::renderWritten);
+    }
+
+    public void begin() {
+        log.info("begin transaction");
+    }
+
+    public void commit() {
+        log.info("commit transaction");
+    }
+
+    public void rollback() {
+        log.info("rollback transaction");
     }
 }
