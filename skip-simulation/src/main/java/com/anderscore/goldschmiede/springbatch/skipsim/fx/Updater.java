@@ -1,11 +1,20 @@
 package com.anderscore.goldschmiede.springbatch.skipsim.fx;
 
 import org.springframework.batch.core.ItemProcessListener;
+import org.springframework.batch.core.annotation.AfterChunk;
 
 import com.anderscore.goldschmiede.springbatch.skipsim.model.Ball;
 
 public class Updater implements ItemProcessListener<Ball, Ball> {
     private ResizableCanvas canvas;
+
+    public ResizableCanvas getCanvas() {
+        return canvas;
+    }
+
+    public void setCanvas(ResizableCanvas canvas) {
+        this.canvas = canvas;
+    }
 
     @Override
     public void beforeProcess(Ball item) {
@@ -22,11 +31,8 @@ public class Updater implements ItemProcessListener<Ball, Ball> {
         canvas.update();
     }
 
-    public ResizableCanvas getCanvas() {
-        return canvas;
-    }
-
-    public void setCanvas(ResizableCanvas canvas) {
-        this.canvas = canvas;
+    @AfterChunk
+    public void afterChunk() throws Exception {
+        canvas.update();
     }
 }
