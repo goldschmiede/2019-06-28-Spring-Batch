@@ -69,3 +69,4 @@ include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples
 
 => Reader und Writer lassen sich auch ohne Spring-Batch-Framework einsetzen
 
+include::index.adoc[]

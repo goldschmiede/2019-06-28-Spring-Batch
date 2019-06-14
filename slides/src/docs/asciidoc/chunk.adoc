@@ -113,7 +113,7 @@ Und wie soll damit umgegangen werden?
 
 Demo...
 
-=== RetryTemplate
+=== RetryTemplate -- Noch ein Framework für eine Schleife...
 
 [plantuml, RetryTemplate, svg, width=1700]
 ....
@@ -157,3 +157,45 @@ RecoveryCallback ..> RetryContext
 AttributeAccessor <|- RetryContext
 RetryContext --> RetryContext: parent
 ....
+
+=== Chunkverarbeitung mit Retry
+
+[plantuml, ChunkExecWithRetry, svg, width=1800]
+....
+loop until FINISHED (RepeatTemplate)
+    TaskletStep -> TransactionTemplate: execute
+    activate TransactionTemplate
+    
+    TransactionTemplate -> ChunkOrientedTasklet: execute
+
+    activate ChunkOrientedTasklet
+    ChunkOrientedTasklet -> SimpleChunkProvider: provide
+    
+    loop chunk-size times (RepeatTemplate)
+        SimpleChunkProvider -> ItemReader: read
+    end
+
+    ChunkOrientedTasklet -> SimpleChunkProcessor: process
+    activate SimpleChunkProcessor
+    
+    loop for each item
+        loop RetryTemplate
+            SimpleChunkProcessor -> ItemProcessor: process
+        end
+        note right: with\nretry
+    end
+   
+    loop RetryTemplate
+        SimpleChunkProcessor -> ItemWriter: write
+    end 
+    note right: with\nretry
+    
+    deactivate SimpleChunkProcessor
+    
+    deactivate ChunkOrientedTasklet
+    
+    deactivate TransactionTemplate
+end
+....
+
+include::index.adoc[]

@@ -118,3 +118,5 @@ include::{samples}/pom.xml[tag=exec]
 ----
 include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobManualTest.java[tag=code]
 ----
+
+include::index.adoc[]
