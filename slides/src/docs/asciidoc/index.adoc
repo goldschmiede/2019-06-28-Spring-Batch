@@ -5,5 +5,6 @@
 . link:repository.html[Spring-Batch Repository]
 . link:exec.html[Job Ausführung]
 . link:chunk.html[Chunk Verarbeitung und Fehlerbehandlung]
+. link:builder.html[Step-Konfiguration]
 
 link:samples.html[Reveal-JS Beispiele]

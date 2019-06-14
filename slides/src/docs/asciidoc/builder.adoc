@@ -1,0 +1,123 @@
+== Job-Konfiguration
+
+[.lead]
+Konfiguration eines Batch-Jobs (Java-Config)
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/RetryJobConfig.java[tag=config]
+----
+
+=== Komponenten zur Job-Konfiguration
+
+[plantuml, BatchConfigurer, svg, height=760]
+....
+interface BatchConfigurer {
+    getJobLauncher(): JobLauncher
+    getJobRepository(): JobRepository
+    getJobExplorer(): JobExplorer
+    getTransactionManager(): PlatformTransactionManager
+}
+interface DataSource
+interface PlatformTransactionManager
+interface JobRepository
+interface JobLauncher
+interface JobExplorer
+
+BatchConfigurer <|. DefaultBatchConfigurer
+
+DefaultBatchConfigurer o-> "1" DataSource: dataSource
+DefaultBatchConfigurer o--> "1" PlatformTransactionManager: transactionManager
+DefaultBatchConfigurer o--> "1" JobRepository: jobRepository
+DefaultBatchConfigurer o--> "1" JobLauncher: jobLauncher
+DefaultBatchConfigurer o--> "1" JobExplorer: jobExplorer
+
+JobRepository "1" <-- StepBuilderFactory: jobRepository
+PlatformTransactionManager "1" <-- StepBuilderFactory: transactionManager
+
+JobRepository "1" <-- JobBuilderFactory: jobRepository
+....
+
+=== Konfiguration eines Steps
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/RetryJobConfig.java[tag=step]
+----
+
+=== StepBuilder
+
+[plantuml, StepBuilder, svg, height=760]
+....
+hide empty description
+[*] -> StepBuilderFactory
+StepBuilderFactory -> StepBuilder: get
+StepBuilder -> SimpleStepBuilder: chunk
+note top
+    Erzeugt TaskletStep
+    mit ChunkOrientedTasklet,
+    und SimpleChunkProvider
+    SimpleChunkProcessor
+end note
+
+SimpleStepBuilder -> FaultTolerantStepBuilder: faultTolerant
+note top
+    Erzeugt TaskletStep
+    mit ChunkOrientedTasklet,
+    und FaultTolerantChunkProvider
+    FaultTolerantChunkProcessor
+end note
+
+
+StepBuilder --> TaskletStepBuilder: tasklet
+note bottom: Erzeugt TaskletStep
+
+StepBuilder --> JobStepBuilder: job
+note bottom: Erzeugt JobStep
+
+StepBuilder --> PartitionStepBuilder: partitioner
+note bottom: Erzeugt PartitionStep
+
+StepBuilder --> FlowStepBuilder: flow
+note bottom
+    Erzeugt FlowStep mit Flow, der selbst
+    wiederum beliebige Steps (z. B. TaskletStep,
+    DecisionStep, FlowStep, ...) enthalten kann
+end note
+....
+
+=== FlowBuilder
+
+[plantuml, FlowBuilder, svg, height=760]
+....
+class FlowBuilder {
+    split(arg0: TaskExecutor): SplitBuilder
+    next(arg0: JobExecutionDecider): UnterminatedFlowBuilder
+    next(arg0: Flow): FlowBuilder
+    next(arg0: Step): FlowBuilder
+    end(): Object
+    from(arg0: Flow): FlowBuilder
+    from(arg0: Step): FlowBuilder
+    from(arg0: JobExecutionDecider): UnterminatedFlowBuilder
+    start(arg0: Step): FlowBuilder
+    start(arg0: Flow): FlowBuilder
+    start(arg0: JobExecutionDecider): UnterminatedFlowBuilder
+    on(arg0: String): TransitionBuilder
+    build(): Object
+}
+
+class TransitionBuilder {
+    to(arg0: JobExecutionDecider): FlowBuilder
+    to(arg0: Flow): FlowBuilder
+    to(arg0: Step): FlowBuilder
+    end(): FlowBuilder
+    end(arg0: String): FlowBuilder
+    stop(): FlowBuilder
+    fail(): FlowBuilder
+    stopAndRestart(arg0: Flow): FlowBuilder
+    stopAndRestart(arg0: Step): FlowBuilder
+    stopAndRestart(arg0: JobExecutionDecider): FlowBuilder
+}
+....
+
+include::index.adoc[]

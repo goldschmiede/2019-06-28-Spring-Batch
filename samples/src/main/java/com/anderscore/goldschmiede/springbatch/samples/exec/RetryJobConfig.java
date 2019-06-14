@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -23,14 +24,16 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.extern.log4j.Log4j2;
 
+@Log4j2
+// tag::config[]
 @Configuration
 @EnableBatchProcessing
-@Log4j2
-public class RetryJobConfig {
+public class RetryJobConfig extends DefaultBatchConfigurer {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
+    // end::config[]
 
     @Bean
     ItemReader<Integer> reader() {
@@ -93,12 +96,14 @@ public class RetryJobConfig {
 
     @Bean
     TaskletStep retryStep() {
+        // tag::step[]
         TaskletStep step = stepBuilderFactory
-                .get("retryStep")
-                .<Integer, String>chunk(4)
+                .get("retryStep") // StepBuilder
+                .<Integer, String>chunk(4) // SimpleStepBuilder
                 .reader(reader()).processor(processor()).writer(writer())
-                .faultTolerant().retryLimit(7).retry(RetryException.class)
+                .faultTolerant().retryLimit(7).retry(RetryException.class) // FaultTolerantStepBuilder
                 .build();
+        // end::step[]
         return step;
     }
 
@@ -110,4 +115,7 @@ public class RetryJobConfig {
                 .build();
         return job;
     }
+
+    // tag::config[]
 }
+// end::config[]
