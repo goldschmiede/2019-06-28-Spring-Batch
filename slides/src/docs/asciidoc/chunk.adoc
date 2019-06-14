@@ -112,3 +112,48 @@ Und wie soll damit umgegangen werden?
 === Überspringen von Datensätzen
 
 Demo...
+
+=== RetryTemplate
+
+[plantuml, RetryTemplate, svg, width=1700]
+....
+interface RetryOperations {
+    execute(retryCallback: RetryCallback<T, E>): T
+    execute(retryCallback: RetryCallback<T, E>, recoveryCallback: RecoveryCallback<T>): T
+}
+
+interface BackOffPolicy
+interface RetryPolicy
+interface RetryListener
+interface RetryContextCache
+
+interface RetryCallback<T, E> {
+    doWithRetry(context: RetryContext): T
+}
+
+interface RetryContext
+interface AttributeAccessor
+
+interface RecoveryCallback<T> {
+    recover(context: RetryContext): T
+}
+
+RetryOperations <|.. RetryTemplate 
+RetryPolicy "1" <-* RetryTemplate
+RetryTemplate *--> "1" BackOffPolicy 
+RetryTemplate *--> "0..n" RetryListener
+RetryTemplate *-> "1" RetryContextCache
+
+RetryPolicy <|.. SimpleRetryPolicy
+RetryPolicy <|.. TimeoutRetryPolicy
+
+BackOffPolicy <|.. NoBackOffPolicy
+BackOffPolicy <|.. FixedBackOffPolicy
+BackOffPolicy <|.. UniformRandomBackOffPolicy
+BackOffPolicy <|.. ExponentialBackOffPolicy
+
+RetryCallback ..> RetryContext 
+RecoveryCallback ..> RetryContext 
+AttributeAccessor <|- RetryContext
+RetryContext --> RetryContext: parent
+....
