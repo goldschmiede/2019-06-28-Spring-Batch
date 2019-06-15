@@ -15,8 +15,8 @@ Vorüberlegungen zur Parallelisierung
 
 * Einen Step mit mehreren Threads ausführen
 * Mehrere Steps gleichzeitig ausführen (Flows)
-* Remote Chunking
 * Partitionierung
+* Remote Chunking
 
 === Step mit mehreren Threads ausführen
 
@@ -60,6 +60,7 @@ AbstractTaskletStepBuilder <|-- SimpleStepBuilder
 
 class PartitionStepBuilder {
     taskExecutor(taskExecutor: TaskExecutor)
+    gridSize(gridSize: int)
 }
 
 SimpleStepBuilder <-[hidden]- PartitionStepBuilder

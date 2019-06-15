@@ -10,5 +10,6 @@
             <AppenderRef ref="Console" />
         </Root>
         <Logger name="com.anderscore.goldschmiede.springbatch" level="info" />
+        <Logger name="com.anderscore.goldschmiede.springbatch.samples.parallel" level="info" />
     </Loggers>
 </Configuration>
