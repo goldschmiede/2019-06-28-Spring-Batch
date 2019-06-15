@@ -86,38 +86,61 @@ note bottom
 end note
 ....
 
-=== FlowBuilder
+=== JobBuilder
 
-[plantuml, FlowBuilder, svg, height=760]
+[plantuml, JobBuilder, svg, width=1600]
 ....
-class FlowBuilder {
-    split(arg0: TaskExecutor): SplitBuilder
-    next(arg0: JobExecutionDecider): UnterminatedFlowBuilder
-    next(arg0: Flow): FlowBuilder
-    next(arg0: Step): FlowBuilder
-    end(): Object
-    from(arg0: Flow): FlowBuilder
-    from(arg0: Step): FlowBuilder
-    from(arg0: JobExecutionDecider): UnterminatedFlowBuilder
-    start(arg0: Step): FlowBuilder
-    start(arg0: Flow): FlowBuilder
-    start(arg0: JobExecutionDecider): UnterminatedFlowBuilder
-    on(arg0: String): TransitionBuilder
-    build(): Object
-}
+hide empty description
+[*] -> JobBuilderFactory
+JobBuilderFactory -> JobBuilder: get
+JobBuilder -> SimpleJobBuilder: start(Step)
+JobBuilder --> JobFlowBuilder: start(Flow)
+note left
+Erweitert FlowBuilder
+end note
+JobBuilder --> JobFlowBuilder: flow(Step)
+SimpleJobBuilder -> SimpleJobBuilder: start(Step)
+SimpleJobBuilder -> SimpleJobBuilder: next(Step)
+SimpleJobBuilder --> JobFlowBuilder: start(Flow)
+SimpleJobBuilder -> Job: build
+JobFlowBuilder --> JobFlowBuilder: start
+JobFlowBuilder --> JobFlowBuilder: next
+JobFlowBuilder --> FlowJobBuilder: end
+FlowJobBuilder -> Job: build
+Job -> [*]
+....
 
-class TransitionBuilder {
-    to(arg0: JobExecutionDecider): FlowBuilder
-    to(arg0: Flow): FlowBuilder
-    to(arg0: Step): FlowBuilder
-    end(): FlowBuilder
-    end(arg0: String): FlowBuilder
-    stop(): FlowBuilder
-    fail(): FlowBuilder
-    stopAndRestart(arg0: Flow): FlowBuilder
-    stopAndRestart(arg0: Step): FlowBuilder
-    stopAndRestart(arg0: JobExecutionDecider): FlowBuilder
-}
+[.columns]
+== Flows 
+
+--
+[.lead]
+Job mit Flow
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/FlowJobConfig.java[tag=flow]
+----
+--
+
+--
+[plantuml, FlowBuilder, svg, height=800]
 ....
+start
+:step 1;
+fork
+    :step 2a 1;
+    :step 2a 2;
+fork again
+    :step 2b;
+end fork
+:step 3;
+if (failed?) then (yes)
+  :step 3x;
+endif
+:step 4;
+stop
+....
+--
 
 include::index.adoc[]

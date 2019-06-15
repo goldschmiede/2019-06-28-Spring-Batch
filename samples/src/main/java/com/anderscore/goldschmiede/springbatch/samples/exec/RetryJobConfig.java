@@ -56,6 +56,7 @@ public class RetryJobConfig extends DefaultBatchConfigurer {
         };
     }
 
+    @Bean
     ItemProcessor<Integer, String> processor() {
         return new ItemProcessor<Integer, String>() {
             private int retry;
@@ -73,6 +74,7 @@ public class RetryJobConfig extends DefaultBatchConfigurer {
         };
     }
 
+    @Bean
     ItemWriter<String> writer() {
         return new ItemWriter<String>() {
             private int retry;

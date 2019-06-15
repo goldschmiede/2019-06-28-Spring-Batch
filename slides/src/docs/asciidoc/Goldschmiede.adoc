@@ -48,6 +48,9 @@
 - Retry
 - Retry-Ablauf
 
+* Transaktionssteuerung über Builder
+* Tx je Chunk (Step-ExecutionContext)
+
 == Builder
 - Hierarchie
 - Flow
@@ -58,6 +61,7 @@
 
 == Parallelisierung
 - ExecutorService
+- Wo kann man überall einen ExecutorService angeben, Auswirkungen, Throttle-Limit
 - Hintergrundtask
 - Partitioning
 - Remote-Chunking
@@ -70,3 +74,4 @@
 == Cloud Task
 - Cloud Task Repository
 - Ausführen von Batch-Job als Cloud Task
+
