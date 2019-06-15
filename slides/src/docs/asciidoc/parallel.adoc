@@ -76,3 +76,54 @@ class SimpleJobBuilder {
 FlowBuilder <-[hidden]- SimpleJobBuilder 
 ....
 
+=== Paritionierung
+
+* Aufteilung der Datenmenge eines Steps auf mehrere Steps
+* Sinnvolle Kriterien zur Aufteilung notwendig
+* Ermöglicht auch Remote-Verarbeitung
+* Auch ohne Partitionierung in Kombination mit @StepScope sinnvoll
+
+=== PartitionStep
+
+[plantuml, PartitionStep, svg, height=760]
+....
+-> PartitionStep: execute
+activate PartitionStep
+
+participant PartitionHandler #lightgrey
+PartitionStep -> PartitionHandler: handle
+activate PartitionHandler
+
+participant StepExecutionSplitter #lightgrey
+PartitionHandler -> StepExecutionSplitter: split
+activate StepExecutionSplitter
+StepExecutionSplitter -> Partitioner: partition
+activate Partitioner
+StepExecutionSplitter <- Partitioner
+deactivate Partitioner
+PartitionHandler <- StepExecutionSplitter
+deactivate StepExecutionSplitter
+
+participant StepExecutionAggregator
+
+PartitionHandler -> Step: execute
+activate Step
+PartitionHandler <- Step
+deactivate Step
+
+PartitionStep <- PartitionHandler
+deactivate PartitionHandler
+
+PartitionStep -> StepExecutionAggregator: aggregate
+activate StepExecutionAggregator
+PartitionStep <- StepExecutionAggregator
+deactivate StepExecutionAggregator
+
+<- PartitionStep
+deactivate PartitionStep
+....
+
+=== Remote Chunking 
+=> Für rechenintensive Steps
+
+image::spring-batch/remote-chunking.png[width=1000]
