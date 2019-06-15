@@ -1,0 +1,77 @@
+== Parallelisierung
+
+[.lead]
+Vorüberlegungen zur Parallelisierung
+
+[%step]
+* Muss das sein?
+** -> Lieber erst mal die Chunkgröße justieren
+* Ihr seid nicht allein!
+* Sinnvoll bei langsamer I/O
+    ** Archivsystem
+    ** Webservice
+
+=== Möglichkeiten der Parallelsierung
+
+* Einen Step mit mehreren Threads ausführen
+* Mehrere Steps gleichzeitig ausführen (Flows)
+* Remote Chunking
+* Partitionierung
+
+=== Step mit mehreren Threads ausführen
+
+[source, java, indent=0]
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/parallel/ParallelStepConfig.java[tag=step]
+----
+
+* Reader, Processor und Writer müssen *thread-save* sein
+* Chunk-size bestimmt Synchronisationsaufwand
+
+=== TaskExecutor in Spring-Batch
+
+[plantuml, BatchConfigurer, svg, width=1800]
+....
+interface TaskExecutor
+SyncTaskExecutor .|> TaskExecutor
+TaskExecutor <|.. SimpleAsyncTaskExecutor
+TaskExecutor <|... ThreadPoolTaskExecutor
+
+class TaskExecutorRepeatTemplate {
+    throttleLimit: int
+}
+
+TaskExecutor <- TaskExecutorRepeatTemplate
+TaskExecutor <-- SplitState
+TaskExecutor <-- TaskExecutorPartitionHandler
+TaskExecutor <--- SimpleJobLauncher
+note bottom
+Ermöglicht asynchrone
+Ausführung eines Jobs
+end note
+
+class AbstractTaskletStepBuilder {
+    taskExecutor(taskExecutor: TaskExecutor)
+    throttleLimit(throttleLimit: int)
+}
+
+AbstractTaskletStepBuilder <|-- TaskletStepBuilder
+AbstractTaskletStepBuilder <|-- SimpleStepBuilder
+
+class PartitionStepBuilder {
+    taskExecutor(taskExecutor: TaskExecutor)
+}
+
+SimpleStepBuilder <-[hidden]- PartitionStepBuilder
+
+class FlowBuilder {
+    split(taskExecutor: TaskExecutor)
+}
+
+class SimpleJobBuilder {
+    split(taskExecutor: TaskExecutor)
+}
+
+FlowBuilder <-[hidden]- SimpleJobBuilder 
+....
+
