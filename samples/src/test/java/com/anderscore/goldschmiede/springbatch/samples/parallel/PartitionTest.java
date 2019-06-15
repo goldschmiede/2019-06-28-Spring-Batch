@@ -8,8 +8,8 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@SpringJUnitConfig(SimplePartitionConfig.class)
-public class SimplePartitionTest {
+@SpringJUnitConfig(PartitionConfig.class)
+public class PartitionTest {
 
     @Autowired
     private JobLauncher jobLauncher;
