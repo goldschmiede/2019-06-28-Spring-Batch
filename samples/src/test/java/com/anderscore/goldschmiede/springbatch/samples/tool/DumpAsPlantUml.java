@@ -6,14 +6,48 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.step.builder.FaultTolerantStepBuilder;
+import org.springframework.batch.core.step.builder.FlowStepBuilder;
+import org.springframework.batch.core.step.builder.JobStepBuilder;
+import org.springframework.batch.core.step.builder.PartitionStepBuilder;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.builder.TaskletStepBuilder;
 
 public class DumpAsPlantUml {
     private final PrintStream out = System.out;
 
     @Test
     void dump() {
-        dump(FlowBuilder.TransitionBuilder.class);
+        dumpTree(FaultTolerantStepBuilder.class);
+        dumpTree(TaskletStepBuilder.class);
+        dumpTree(FlowStepBuilder.class);
+        dumpTree(JobStepBuilder.class);
+        dumpTree(PartitionStepBuilder.class);
+        dumpTree(StepBuilder.class);
+    }
+
+    private void dumpTree(Class<?> clazz) {
+        Class<?> superclass = clazz.getSuperclass();
+        if (superclass != null && !Object.class.equals(superclass)) {
+            dumpTree(superclass);
+        }
+        for (Class<?> ifc : clazz.getInterfaces()) {
+            dumpTree(ifc);
+        }
+        dump(clazz);
+        out.println();
+        if (superclass != null && !Object.class.equals(superclass)) {
+            out.print(superclass.getSimpleName());
+            out.print(" <|-- ");
+            out.println(clazz.getSimpleName());
+        }
+        for (Class<?> ifc : clazz.getInterfaces()) {
+            out.println();
+            out.print(ifc.getSimpleName());
+            out.print(" <|.. ");
+            out.println(clazz.getSimpleName());
+        }
+        out.println();
     }
 
     private void dump(Class<?> clazz) {

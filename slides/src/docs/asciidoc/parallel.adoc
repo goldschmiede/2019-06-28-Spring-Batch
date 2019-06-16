@@ -127,3 +127,35 @@ deactivate PartitionStep
 => Für rechenintensive Steps
 
 image::spring-batch/remote-chunking.png[width=1000]
+
+== Listener
+
+[plantuml, Listener, svg, height=760]
+....
+class StepBuilderHelper {
+    listener(listener: StepExecutionListener): StepBuilderHelper
+    listener(listener: Object): StepBuilderHelper
+}
+
+class AbstractTaskletStepBuilder {
+    stream(stream: ItemStream): AbstractTaskletStepBuilder
+    listener(listener: ChunkListener): AbstractTaskletStepBuilder
+}
+
+StepBuilderHelper <|-- AbstractTaskletStepBuilder
+
+class SimpleStepBuilder {
+    listener(listener: ItemProcessListener): SimpleStepBuilder
+    listener(listener: ItemReadListener): SimpleStepBuilder
+    listener(listener: ItemWriteListener): SimpleStepBuilder
+}
+
+AbstractTaskletStepBuilder <|-- SimpleStepBuilder
+
+class FaultTolerantStepBuilder {
+    listener(listener: RetryListener): FaultTolerantStepBuilder
+    listener(listener: SkipListener): FaultTolerantStepBuilder
+}
+
+SimpleStepBuilder <|-- FaultTolerantStepBuilder
+....

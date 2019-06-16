@@ -119,26 +119,29 @@ public class PartitionConfig extends DefaultBatchConfigurer {
         };
     }
 
+    static class SumItemWriter implements ItemWriter<Integer> {
+        private ExecutionContext ec;
+
+        @BeforeStep
+        void beforeStep(StepExecution stepExecution) {
+            ec = stepExecution.getExecutionContext();
+        }
+
+        @Override
+        public void write(List<? extends Integer> items) throws Exception {
+            log.info("write: {}", items);
+            int sum = ec.getInt("sum", 0);
+            for (Integer item : items) {
+                sum += item;
+            }
+            ec.putInt("sum", sum);
+        }
+    }
+
     @Bean
-    ItemWriter<Integer> writer() {
-        return new ItemWriter<Integer>() {
-            private ExecutionContext ec;
-
-            @BeforeStep
-            void beforeStep(StepExecution stepExecution) {
-                ec = stepExecution.getExecutionContext();
-            }
-
-            @Override
-            public void write(List<? extends Integer> items) throws Exception {
-                log.info("write: {}", items);
-                int sum = ec.getInt("sum", 0);
-                for (Integer item : items) {
-                    sum += item;
-                }
-                ec.putInt("sum", sum);
-            }
-        };
+    @StepScope
+    SumItemWriter writer() { // must not return interface to recognize @BeforeStep
+        return new SumItemWriter();
     }
 
     @Bean
@@ -163,7 +166,7 @@ public class PartitionConfig extends DefaultBatchConfigurer {
                 }
                 int total = 0;
                 for (StepExecution stepExecution : executions) {
-                    int sum = stepExecution.getExecutionContext().getInt("sum", 0);
+                    int sum = stepExecution.getExecutionContext().getInt("sum");
                     total += sum;
                 }
                 result.getExecutionContext().putInt("sum", total);
