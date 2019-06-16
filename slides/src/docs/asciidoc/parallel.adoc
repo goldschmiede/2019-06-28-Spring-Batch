@@ -273,3 +273,5 @@ RetryListener <. FaultTolerantStepBuilder
   `@Value("++#++{jobExecutionContext[key]}")` oder +
   `@Value("++#++{stepExecutionContext[minValue]}")`
 * `@StepScope` bei Reader, Processor oder Writer in Kombination mit Partitionierung sinnvoll
+
+include::index.adoc[]

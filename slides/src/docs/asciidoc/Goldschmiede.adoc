@@ -71,7 +71,3 @@
 - JobExplorer / JobOperator
 - Wiederanlauf
 
-== Cloud Task
-- Cloud Task Repository
-- Ausführen von Batch-Job als Cloud Task
-

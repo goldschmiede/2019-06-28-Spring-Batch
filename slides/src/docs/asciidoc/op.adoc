@@ -1,0 +1,63 @@
+== Operations
+
+[.lead]
+Operations Aufgaben
+
+[%step]
+* Job Starten
+* Prüfen, ob Job erfolgreich ausgeführt wurde
+* Fehlerursache nachsehen
+* Statistik erstellen
+* Job anhalten bzw. forsetzen
+* Job abbrechen
+* Wiederanlauf versuchen
+
+=== Operations Interfaces
+
+[plantuml, Operations, svg, width=100%]
+....
+interface JobLauncher {
+    run(job: Job, jobParameters: JobParameters): JobExecution
+}
+
+JobLauncher <|.. SimpleJobLauncher
+note bottom
+Kann Job synchron oder asynchron ausführen
+end note
+
+interface JobExplorer {
+    getJobNames(): List<String>
+    getJobInstances(jobName: String, start: int, count: int): List<JobInstance>
+    findJobInstancesByJobName(jobName: String, start: int, count: int): List<JobInstance>
+    getJobInstanceCount(jobName: String): int
+    getJobInstance(instanceId: Long): JobInstance
+    getJobExecutions(jobInstance: JobInstance): List<JobExecution>
+    getJobExecution(executionId: Long): JobExecution
+    findRunningJobExecutions(jobName: String): Set<JobExecution>
+    getStepExecution(executionId: Long, stepExecutionId: Long): StepExecution
+}
+
+JobExplorer <|.. SimpleJobExplorer
+
+interface JobOperator {
+    start(jobName: String, parameters: String): Long
+    restart(executionId: long): Long
+    startNextInstance(jobName: String): Long
+    stop(executionId: long): boolean
+    abandon(executionId: long): JobExecution
+    getJobNames(): Set<String>
+    getParameters(executionId: long): String
+    getJobInstances(jobName: String, start: int, count: int): List<Long>
+    getExecutions(instanceId: long): List<Long>
+    getRunningExecutions(jobName: String): Set<Long>
+    getSummary(executionId: long): String
+    getStepExecutionSummaries(executionId: long): Map<Long, String>
+}
+
+JobOperator <|.. SimpleJobOperator
+
+JobLauncher <-- CommandLineJobRunner
+JobExplorer <-- CommandLineJobRunner
+....
+
+include::index.adoc[]

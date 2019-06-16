@@ -1,4 +1,4 @@
-== Agenda
+== Spring-Batch Goldschmiede -- Agenda
 
 . link:intro.html[Einführung]
 . link:infra.html[Spring-Batch Infrastruktur]
@@ -7,5 +7,4 @@
 . link:chunk.html[Chunk Verarbeitung und Fehlerbehandlung]
 . link:builder.html[Konfiguration]
 . link:parallel.html[Parallelisierung]
-
-link:samples.html[Reveal-JS Beispiele]
+. link:op.html[Operations]
