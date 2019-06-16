@@ -130,12 +130,20 @@ image::spring-batch/remote-chunking.png[width=1000]
 
 == Listener
 
-[plantuml, Listener, svg, height=760]
+[.lead]
+Listener Interfaces und deren Registrierung
+
+[plantuml, Listener, svg, width=100%]
 ....
 class StepBuilderHelper {
     listener(listener: StepExecutionListener): StepBuilderHelper
     listener(listener: Object): StepBuilderHelper
 }
+note left
+Es können beliebige Objekte
+mit entsprechenden Listener
+Annotationen registriert werden.
+end note
 
 class AbstractTaskletStepBuilder {
     stream(stream: ItemStream): AbstractTaskletStepBuilder
@@ -151,6 +159,12 @@ class SimpleStepBuilder {
 }
 
 AbstractTaskletStepBuilder <|-- SimpleStepBuilder
+note left
+Reader, Writer und Processer werden
+immer als Listener registriert, sofern
+sie ein Listener-Interface implementieren
+oder entsprechend Annotierte Methoden haben.
+end note
 
 class FaultTolerantStepBuilder {
     listener(listener: RetryListener): FaultTolerantStepBuilder
@@ -158,4 +172,104 @@ class FaultTolerantStepBuilder {
 }
 
 SimpleStepBuilder <|-- FaultTolerantStepBuilder
+
+interface JobListener {
+    beforeJob()
+    afterJob()
+}
+
+interface ItemStream {
+    update(arg0: ExecutionContext)
+    close()
+    open(arg0: ExecutionContext)
+}
+
+ItemStream <. AbstractTaskletStepBuilder
+
+interface StepListener {
+}
+
+interface StepExecutionListener {
+    beforeStep(arg0: StepExecution)
+    afterStep(arg0: StepExecution): ExitStatus
+}
+
+StepExecutionListener -|> StepListener
+
+interface ChunkListener {
+    beforeChunk(arg0: ChunkContext)
+    afterChunk(arg0: ChunkContext)
+    afterChunkError(arg0: ChunkContext)
+}
+
+StepListener <|-- ChunkListener
+
+interface StepListener {
+}
+
+interface ItemReadListener {
+    beforeRead()
+    afterRead(arg0: Object)
+    onReadError(arg0: Exception)
+}
+
+StepListener <|--- ItemReadListener
+
+interface ItemProcessListener {
+    beforeProcess(arg0: Object)
+    onProcessError(arg0: Object, arg1: Exception)
+    afterProcess(arg0: Object, arg1: Object)
+}
+
+StepListener <|--- ItemProcessListener
+
+interface ItemWriteListener {
+    afterWrite(arg0: List)
+    beforeWrite(arg0: List)
+    onWriteError(arg0: Exception, arg1: List)
+}
+
+StepListener <|--- ItemWriteListener
+
+interface SkipListener {
+    onSkipInProcess(arg0: Object, arg1: Throwable)
+    onSkipInRead(arg0: Throwable)
+    onSkipInWrite(arg0: Object, arg1: Throwable)
+}
+
+StepListener <|-- SkipListener
+
+class StepListenerSupport {
+}
+
+StepExecutionListener <|.. StepListenerSupport
+
+ChunkListener <|.. StepListenerSupport
+
+ItemReadListener <|.. StepListenerSupport
+
+ItemProcessListener <|.. StepListenerSupport
+
+ItemWriteListener <|.. StepListenerSupport
+
+SkipListener <|.. StepListenerSupport
+
+interface RetryListener {
+    close(arg0: RetryContext, arg1: RetryCallback, arg2: Throwable)
+    open(arg0: RetryContext, arg1: RetryCallback): boolean
+    onError(arg0: RetryContext, arg1: RetryCallback, arg2: Throwable)
+}
+
+RetryListener <. FaultTolerantStepBuilder
 ....
+
+== Scope
+
+[.lead]
+@StepScope und @JobScope
+
+* Erzeugt Bean für Lebenszyklus eines Steps bzw. eines Jobs
+* Ermöglicht _late binding_ über `@Value("++#++{jobParameters[input.file.name]}")`, +
+  `@Value("++#++{jobExecutionContext[key]}")` oder +
+  `@Value("++#++{stepExecutionContext[minValue]}")`
+* `@StepScope` bei Reader, Processor oder Writer in Kombination mit Partitionierung sinnvoll

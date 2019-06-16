@@ -5,19 +5,34 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
+import javax.batch.api.listener.JobListener;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.batch.core.listener.StepListenerSupport;
 import org.springframework.batch.core.step.builder.FaultTolerantStepBuilder;
 import org.springframework.batch.core.step.builder.FlowStepBuilder;
 import org.springframework.batch.core.step.builder.JobStepBuilder;
 import org.springframework.batch.core.step.builder.PartitionStepBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.builder.TaskletStepBuilder;
+import org.springframework.batch.item.ItemStream;
+import org.springframework.retry.RetryListener;
 
 public class DumpAsPlantUml {
     private final PrintStream out = System.out;
 
     @Test
-    void dump() {
+    void dumpListener2() {
+        dumpTree(ItemStream.class);
+        dumpTree(JobListener.class);
+    }
+
+    void dumpListener() {
+        dumpTree(StepListenerSupport.class);
+        dumpTree(RetryListener.class);
+    }
+
+    void dumpBuilder() {
         dumpTree(FaultTolerantStepBuilder.class);
         dumpTree(TaskletStepBuilder.class);
         dumpTree(FlowStepBuilder.class);
@@ -44,7 +59,11 @@ public class DumpAsPlantUml {
         for (Class<?> ifc : clazz.getInterfaces()) {
             out.println();
             out.print(ifc.getSimpleName());
-            out.print(" <|.. ");
+            if (clazz.isInterface()) {
+                out.print(" <|-- ");
+            } else {
+                out.print(" <|.. ");
+            }
             out.println(clazz.getSimpleName());
         }
         out.println();
