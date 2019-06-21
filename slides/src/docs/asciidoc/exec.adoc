@@ -84,9 +84,10 @@ loop until FINISHED
 end
 ....
 
-=== Job definieren
+=== Hello-World Job mit einem TaskletStep
 
 [source, java, indent=0]
+.HelloJobConfig.java
 ----
 include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobConfig.java[tag=helloJob]
 ----
@@ -94,6 +95,7 @@ include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples
 === Rahmen für Job-Konfiguration
 
 [source, java, indent=0]
+.HelloJobConfig.java
 ----
 include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobConfig.java[tag=config]
 ----
@@ -105,7 +107,7 @@ include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples
 include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/exec/HelloJobTest.java[tag=code]
 ----
 
-=== Job (CommandLineRunner)
+=== Job ausführen (CommandLineJobRunner)
 
 [source, xml, indent=0]
 ----

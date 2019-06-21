@@ -9,6 +9,8 @@ import javax.batch.api.listener.JobListener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.explore.support.SimpleJobExplorer;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.listener.StepListenerSupport;
@@ -24,7 +26,6 @@ import org.springframework.retry.RetryListener;
 public class DumpAsPlantUml {
     private final PrintStream out = System.out;
 
-    @Test
     void dumpOp() {
         dumpTree(SimpleJobLauncher.class);
         dumpTree(SimpleJobExplorer.class);
@@ -48,6 +49,16 @@ public class DumpAsPlantUml {
         dumpTree(JobStepBuilder.class);
         dumpTree(PartitionStepBuilder.class);
         dumpTree(StepBuilder.class);
+    }
+
+    void dumpJobBuilder() {
+        dumpTree(JobBuilder.class);
+        dumpTree(SimpleJobBuilder.class);
+    }
+
+    @Test
+    void dumpBuilder2() {
+        dumpTree(FaultTolerantStepBuilder.class);
     }
 
     private void dumpTree(Class<?> clazz) {

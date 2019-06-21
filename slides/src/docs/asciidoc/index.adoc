@@ -1,10 +1,12 @@
 == Spring-Batch Goldschmiede -- Agenda
 
+-> link:hjhessmann.html[Vorstellung]
+
 . link:intro.html[Einführung]
 . link:infra.html[Spring-Batch Infrastruktur]
 . link:repository.html[Spring-Batch Repository]
 . link:exec.html[Job Ausführung]
-. link:chunk.html[Chunk Verarbeitung und Fehlerbehandlung]
+. link:chunk.html[Chunkverarbeitung und Fehlerbehandlung]
 . link:builder.html[Konfiguration]
 . link:parallel.html[Parallelisierung]
 . link:op.html[Operations]

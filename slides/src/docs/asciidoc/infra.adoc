@@ -54,6 +54,7 @@ include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples
 === FlatFileItemReader erzeugen
 
 [source, java, indent=0]
+.FlatFileItemReaderTest.java
 ----
 include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/infra/FlatFileItemReaderTest.java[tags=createPersonReader]
 ----

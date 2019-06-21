@@ -24,7 +24,7 @@ public class BallContainer implements ItemReader<Ball>, ItemWriter<Ball>, ItemPr
     }
 
     private static final SkipMode skipMode = SkipMode.NONE;
-    private static final int delay = 2500;
+    private static final int delay = 1500;
 
     private final List<Ball> pool = new ArrayList<>();
     private Optional<Ball> processing = Optional.empty();

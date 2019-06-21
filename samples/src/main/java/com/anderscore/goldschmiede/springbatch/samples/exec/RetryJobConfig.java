@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 // tag::config[]
 @Configuration
 @EnableBatchProcessing
-public class RetryJobConfig extends DefaultBatchConfigurer {
+public class RetryJobConfig extends DefaultBatchConfigurer { // <1>
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
     @Autowired
@@ -111,10 +111,12 @@ public class RetryJobConfig extends DefaultBatchConfigurer {
 
     @Bean
     Job retryJob(Step step) {
+        // tag::job[]
         Job job = jobBuilderFactory
                 .get("retryJob")
                 .start(step)
                 .build();
+        // end::job[]
         return job;
     }
 

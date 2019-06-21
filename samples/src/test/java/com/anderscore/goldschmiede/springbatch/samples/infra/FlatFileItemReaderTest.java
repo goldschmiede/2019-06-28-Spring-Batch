@@ -31,7 +31,7 @@ public class FlatFileItemReaderTest {
                 .name("personReader") // alternativ: .saveState(false)
                 .resource(new ClassPathResource("sample-data.csv"))
                 .delimited().delimiter(";")
-                .names(new String[] { "firstName", "lastName" })
+                .names(new String[] { "firstName", "lastName" }) // LineTokenizer
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {
                     {
                         setTargetType(Person.class);

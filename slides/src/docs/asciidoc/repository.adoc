@@ -12,7 +12,7 @@ Wozu ein Repository?
 {empty} +
 
 [.teacherBox]
-TIP: `MapJobRepository` kann als Platzhalter verwendet werden
+NOTE: `MapJobRepository` kann als Platzhalter verwendet werden
 
 === Aufbau eines Batch-Jobs
 
@@ -33,7 +33,7 @@ Step --> "1" ItemWriter
 [plantuml, JobLaufzeitModell, svg, height=750]
 ....
 Job <-- "0..n" JobInstance
-note left: Je erfolgreichem Lauf\ngibt es eine JobInstance
+note left: Je Aufruf (Parameter-Set)\ngibt es eine JobInstance
 
 JobInstance -> "1..n" JobExecution
 note top: Je versuchtem Lauf
