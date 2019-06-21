@@ -14,7 +14,7 @@ Operations Aufgaben
 
 === Operations Interfaces
 
-[plantuml, Operations, svg, width=100%]
+[plantuml, Operations, svg, height=760]
 ....
 interface JobLauncher {
     run(job: Job, jobParameters: JobParameters): JobExecution
@@ -22,7 +22,8 @@ interface JobLauncher {
 
 JobLauncher <|.. SimpleJobLauncher
 note bottom
-Kann Job synchron oder asynchron ausführen
+Kann Job synchron oder asynchron ausführen,
+je nachdem welcher TaskExecutor gesetzt ist 
 end note
 
 interface JobExplorer {
@@ -38,6 +39,35 @@ interface JobExplorer {
 }
 
 JobExplorer <|.. SimpleJobExplorer
+
+JobLauncher <-- CommandLineJobRunner
+JobExplorer <-- CommandLineJobRunner
+....
+
+=== Eindeutigen _run.id_ Parameter konfigurieren
+
+[source, java, indent=0]
+.LauncherConfig.java
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/op/LauncherConfig.java[tag=incrementer]
+----
+
+=== Mit eindeutiger _run.id_ starten
+
+[source, java, indent=0]
+.LauncherConfig.java
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/op/LauncherTest.java[tag=launch]
+----
+
+=== JobOperator
+
+[plantuml, JobOperator, svg, height=760]
+....
+interface JobLauncher
+interface JobExplorer
+interface JobRegistry
+interface JobRepository
 
 interface JobOperator {
     start(jobName: String, parameters: String): Long
@@ -56,8 +86,26 @@ interface JobOperator {
 
 JobOperator <|.. SimpleJobOperator
 
-JobLauncher <-- CommandLineJobRunner
-JobExplorer <-- CommandLineJobRunner
+SimpleJobOperator --> JobLauncher
+SimpleJobOperator --> JobExplorer
+SimpleJobOperator --> JobRegistry
+SimpleJobOperator --> JobRepository
 ....
+
+=== JobOperator konfigurieren
+
+[source, java, indent=0]
+.OperatorConfig.java
+----
+include::{samples}/src/main/java/com/anderscore/goldschmiede/springbatch/samples/op/OperatorConfig.java[tag=operator]
+----
+
+=== JobOperator verwenden
+
+[source, java, indent=0]
+.OperatorConfig.java
+----
+include::{samples}/src/test/java/com/anderscore/goldschmiede/springbatch/samples/op/OperatorTest.java[tag=operator]
+----
 
 include::index.adoc[]
