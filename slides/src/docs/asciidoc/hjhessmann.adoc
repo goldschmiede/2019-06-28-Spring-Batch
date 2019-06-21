@@ -1,0 +1,20 @@
+[.columns]
+== Vorstellung
+
+--
+[.heading]
+Hans Jörg Heßmann (Dipl. Informatiker)
+
+* Softwareentwickler und Architekt
+* Java seit 1997
+* Schwerpunkte
+** Webanwendungen
+** Batch-Entwicklung
+** Build und Deployment
+** Codequalität und Testing
+* Java, Kotlin, Spring, Asciidoc, Gradle, ...
+
+link:index.html[-> Agenda]
+--
+
+image::anderscore/user-hjhessmann.jpg[]
