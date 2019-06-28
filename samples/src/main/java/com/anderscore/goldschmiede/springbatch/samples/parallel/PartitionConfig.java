@@ -92,7 +92,7 @@ public class PartitionConfig extends DefaultBatchConfigurer {
     @Bean
     Step partitionStep() {
         Step partitionStep = stepBuilderFactory.get("partitionStep")
-                .listener(promotionListener()) // promote sum from step execution context to job execution context
+                .listener(promotionListener()) // Summe aus Step-ExecutionContext in Job-ExcecutionContext übernehmen
                 .partitioner("stepx", partitioner()) // Präfix für partitionierte Steps
                 .step(step()) // Der Step, der von meheren Threads ausgeführt wird
                 .gridSize(5) // Anzahl Threads
@@ -114,8 +114,8 @@ public class PartitionConfig extends DefaultBatchConfigurer {
         TaskletStep step = stepBuilderFactory
                 .get("simpleStep")
                 .<Integer, Integer>chunk(10)
-                .reader(reader()).writer(writer()) // processor is optional
-                .stream(reader()) // opens and closes the reader
+                .reader(reader()).writer(writer()) // Prozessor ist optional
+                .stream(reader()) // Ruft bei Reader open() und close() auf
                 .build();
         return step;
     }
@@ -159,10 +159,10 @@ public class PartitionConfig extends DefaultBatchConfigurer {
     }
 
     @Bean
-    @StepScope // make sure there is a separate reader for each step
+    @StepScope // Sicherstellen dass jeder Step sein Reader-Objekt hat
     ItemStreamReader<Integer> reader() {
         return new AbstractItemCountingItemStreamItemReader<Integer>() {
-            @Value("#{stepExecutionContext[minValue]}") // late binding due to StepScope
+            @Value("#{stepExecutionContext[minValue]}") // Late Binding wg. StepScope
             private int minValue;
             @Value("#{stepExecutionContext[maxValue]}")
             private int maxValue;
@@ -213,7 +213,7 @@ public class PartitionConfig extends DefaultBatchConfigurer {
 
     @Bean
     @StepScope
-    SumItemWriter writer() { // must not return interface to recognize @BeforeStep
+    SumItemWriter writer() { // Darf kein Interface zurückgeben, anderfalls würde @BeforeStep nicht erkannt werden
         return new SumItemWriter();
     }
 
