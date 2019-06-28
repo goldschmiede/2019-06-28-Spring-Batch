@@ -6,11 +6,11 @@ Wozu Chunkverarbeitung?
 [%step]
 - Transaktion zu groß (wenn der ganze Job in einer Transaktion läuft)
 ** Rollback Segment läuft über
-** Bei Fehler wird alles abgebrochen
+** Bei Fehler wird alles zurückgerollt
 - Transaktionen zu klein (wenn jeder Datensatz in einer Transaktion verarbeitet wird)
 ** Performance
 ** Spring-Batch aktualisiert Status mit jeder Transaktion
-- => Daten werden in Chunks verarbeitet
+- => Lösung: Daten in Chunks verarbeiten
 
 === ChunkOrientedTasklet
 

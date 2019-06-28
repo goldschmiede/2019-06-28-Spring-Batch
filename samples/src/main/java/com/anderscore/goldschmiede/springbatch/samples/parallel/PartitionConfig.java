@@ -44,6 +44,64 @@ public class PartitionConfig extends DefaultBatchConfigurer {
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
+    /**
+     * Dieser Job berechnet die Summe der Zahlen zwischen 1 und 100. Vorgehen: 1. Aufteilen in 20er Pakete und von 5 Threads
+     * parallel verarbeiten. 2. Teilergebnisse aggregieren und im ExecutionContext ablegen 3. Weiterer Step gibt Ergebnis
+     * aus.
+     */
+    @Bean
+    Job partitionJob() {
+        TaskletStep resultStep = stepBuilderFactory.get("showResult").tasklet(showResultTasklet()).build();
+        Job job = jobBuilderFactory
+                .get("partitionJob")
+                .start(partitionStep())
+                .next(resultStep)
+                .build();
+        return job;
+    }
+
+    /**
+     * Ergebnis ausgeben...
+     */
+    @Bean
+    Tasklet showResultTasklet() {
+        return new Tasklet() {
+
+            @Override
+            public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+                int sum = (Integer) chunkContext.getStepContext().getJobExecutionContext().get("sum");
+                System.out.println("Result: " + sum);
+                return RepeatStatus.FINISHED;
+            }
+        };
+    }
+
+    /**
+     * Ergebnis aus Step-ExecutionContext in den Job-ExecutionContext kopieren
+     */
+    @Bean
+    ExecutionContextPromotionListener promotionListener() {
+        var listener = new ExecutionContextPromotionListener();
+        listener.setKeys(new String[] { "sum" });
+        return listener;
+    }
+
+    /**
+     * Step, der die Partitionierung für einen anderen Step ausführt
+     */
+    @Bean
+    Step partitionStep() {
+        Step partitionStep = stepBuilderFactory.get("partitionStep")
+                .listener(promotionListener()) // promote sum from step execution context to job execution context
+                .partitioner("stepx", partitioner()) // Präfix für partitionierte Steps
+                .step(step()) // Der Step, der von meheren Threads ausgeführt wird
+                .gridSize(5) // Anzahl Threads
+                .taskExecutor(taskExecutor())
+                .aggregator(aggregator())
+                .build();
+        return partitionStep;
+    }
+
     @Bean
     ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
@@ -51,6 +109,21 @@ public class PartitionConfig extends DefaultBatchConfigurer {
         return taskExecutor;
     }
 
+    @Bean
+    TaskletStep step() {
+        TaskletStep step = stepBuilderFactory
+                .get("simpleStep")
+                .<Integer, Integer>chunk(10)
+                .reader(reader()).writer(writer()) // processor is optional
+                .stream(reader()) // opens and closes the reader
+                .build();
+        return step;
+    }
+
+    /**
+     * Zerlegt die Zahlenreihe 1..100 in grid-size große Teile und legt diese als minValue und maxValue im jeweiligen
+     * ExecutionContext ab
+     */
     @Bean
     Partitioner partitioner() {
         return new Partitioner() {
@@ -145,17 +218,6 @@ public class PartitionConfig extends DefaultBatchConfigurer {
     }
 
     @Bean
-    TaskletStep step() {
-        TaskletStep step = stepBuilderFactory
-                .get("simpleStep")
-                .<Integer, Integer>chunk(10)
-                .reader(reader()).writer(writer()) // processor is optional
-                .stream(reader()) // opens and closes the reader
-                .build();
-        return step;
-    }
-
-    @Bean
     StepExecutionAggregator aggregator() {
         return new DefaultStepExecutionAggregator() {
             @Override
@@ -173,49 +235,5 @@ public class PartitionConfig extends DefaultBatchConfigurer {
                 log.info("total: {}", total);
             }
         };
-    }
-
-    @Bean
-    ExecutionContextPromotionListener promotionListener() {
-        var listener = new ExecutionContextPromotionListener();
-        listener.setKeys(new String[] { "sum" });
-        return listener;
-    }
-
-    @Bean
-    Step partitionStep() {
-        Step partitionStep = stepBuilderFactory.get("partitionStep")
-                .listener(promotionListener()) // promote sum from step execution context to job execution context
-                .partitioner("stepx", partitioner())
-                .step(step())
-                .gridSize(5)
-                .taskExecutor(taskExecutor())
-                .aggregator(aggregator())
-                .build();
-        return partitionStep;
-    }
-
-    @Bean
-    Tasklet showResultTasklet() {
-        return new Tasklet() {
-
-            @Override
-            public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                int sum = (Integer) chunkContext.getStepContext().getJobExecutionContext().get("sum");
-                System.out.println("Result: " + sum);
-                return RepeatStatus.FINISHED;
-            }
-        };
-    }
-
-    @Bean
-    Job partitionJob() {
-        TaskletStep resultStep = stepBuilderFactory.get("showResult").tasklet(showResultTasklet()).build();
-        Job job = jobBuilderFactory
-                .get("partitionJob")
-                .start(partitionStep())
-                .next(resultStep)
-                .build();
-        return job;
     }
 }

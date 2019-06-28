@@ -8,7 +8,7 @@ Was versteht man darunter?
 * Historisch: Stapelverarbeitung (Lochkarten)
 * Windows: .BAT Dateien
 * Großer Stil: Operator verwaltet Jobs im Rechenzentrum
-* Batchverarbeitung vs. Dialogverarbeitung
+* Batchverarbeitung vs. Dialogverarbeitung vs. Messaging
 
 === Wodurch zeichnet sich Batchverarbeitung aus?
 
@@ -17,6 +17,7 @@ Batch-Programme ...
 * laufen ohne Benutzerinteraktion
 * verarbeiten eine vorgegebene Datenmenge
 * enden nachdem alle Daten verarbeitet wurden
+* eigenen sich nur, wenn Verzögerung akzeptabel ist 
 
 === Anforderungen
 
@@ -46,7 +47,7 @@ image::spring-batch/Mothers-Brewing-Spring-Batch.jpg[]
 
 image::spring-batch/Lernkurve1.svg[width=1200]
 
-=== Lernkurve
+=== Ziel für heute...
 
 image::spring-batch/Lernkurve3.svg[width=1200]
 

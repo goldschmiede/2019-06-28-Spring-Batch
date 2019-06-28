@@ -89,7 +89,7 @@ public class ParallelStepConfig extends DefaultBatchConfigurer {
                 .<Integer, String>chunk(5)
                 .reader(reader()).processor(processor()).writer(writer())
                 .taskExecutor(taskExecutor()) // Ausführung mit mehreren Threads
-                .throttleLimit(4) // begrenzt Anzahl der Threads
+                .throttleLimit(4) // begrenzt Anzahl der Threads (default: 4)
                 .build();
         // end::step[]
         return step;

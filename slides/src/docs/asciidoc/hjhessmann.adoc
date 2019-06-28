@@ -13,8 +13,24 @@ Hans Jörg Heßmann (Dipl. Informatiker)
 ** Build und Deployment
 ** Codequalität und Testing
 * Java, Kotlin, Spring, Asciidoc, Gradle, ...
+--
+
+image::anderscore/user-hjhessmann.jpg[]
+
+[.columns]
+== Vorstellung
+
+[.top]
+--
+[.heading]
+Und Ihr?
+
+* Name
+* Erfahrungen mit Batchverarbeitung, +
+  insbes. Spring-Batch
+* Erwartungen
 
 link:index.html[-> Agenda]
 --
 
-image::anderscore/user-hjhessmann.jpg[]
+image::anderscore/anybody.jpg[ height=600, pdfwidth=50%]

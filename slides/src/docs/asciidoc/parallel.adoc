@@ -11,7 +11,7 @@ Vorüberlegungen zur Parallelisierung
     ** Archivsystem
     ** Webservice
 
-=== Möglichkeiten der Parallelsierung
+=== Möglichkeiten der Parallelisierung
 
 * Einen Step mit mehreren Threads ausführen
 * Mehrere Steps gleichzeitig ausführen (Flows)
