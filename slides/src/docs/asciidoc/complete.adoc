@@ -1,0 +1,19 @@
+== Spring-Batch Goldschmiede -- Agenda
+
+. link:intro.html[Einführung]
+. link:infra.html[Spring-Batch Infrastruktur]
+. link:repository.html[Spring-Batch Repository]
+. link:exec.html[Job Ausführung]
+. link:chunk.html[Chunkverarbeitung und Fehlerbehandlung]
+. link:builder.html[Konfiguration]
+. link:parallel.html[Parallelisierung]
+. link:op.html[Operations]
+
+include::intro.adoc[]
+include::infra.adoc[]
+include::repository.adoc[]
+include::exec.adoc[]
+include::chunk.adoc[]
+include::builder.adoc[]
+include::parallel.adoc[]
+include::op.adoc[]
